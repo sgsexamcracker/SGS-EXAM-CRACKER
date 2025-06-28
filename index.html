@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>SGS EXAM CRACKER</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+    }
+    .header {
+      background-color: #003366;
+      color: white;
+      padding: 16px;
+      font-size: 24px;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+    #user-name {
+      margin-top: 8px;
+      font-size: 16px;
+      color: #333;
+    }
+    .welcome {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #222;
+      font-weight: 500;
+      padding: 0 12px;
+    }
+    .motivation {
+      margin-top: 10px;
+      font-size: 17px;
+      color: #555;
+      padding: 0 12px;
+    }
+    .custom-button {
+      display: block;
+      width: 85%;
+      max-width: 320px;
+      margin: 18px auto;
+      padding: 16px;
+      font-size: 17px;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      animation: blink 1.2s infinite;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      transition: transform 0.1s ease;
+    }
+    .custom-button:active {
+      transform: scale(0.97);
+    }
+    .btn-red    { background-color: #d93025; }
+    .btn-green  { background-color: #188038; }
+    .btn-brown  { background-color: #8B4513; }
+    .btn-black  { background-color: #000000; }
+    @keyframes blink {
+      0%   { opacity: 1; }
+      50%  { opacity: 0.7; }
+      100% { opacity: 1; }
+    }
+    .share-button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 15px;
+      background-color: #0066cc;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    }
+    .logout-button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 14px;
+      background-color: #555;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .copyright {
+      margin-top: 25px;
+      font-size: 13px;
+      color: #888;
+      padding-bottom: 10px;
+    }
+  </style>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+</head>
+<body>
+
+  <div id="login-section">
+    <h3>📲 Please login to continue</h3>
+    <button onclick="googleLogin()" class="custom-button btn-green">Sign in with Google</button>
+  </div>
+
+  <div id="main-content" style="display:none;">
+    <div class="header">
+      SGS EXAM CRACKER
+    </div>
+    <div id="user-name"></div> <!-- यहाँ user का नाम दिखेगा -->
+
+    <div class="welcome">
+      🙏 Welcome to SGS EXAM CRACKER में आपका स्वागत है! 🎉
+    </div>
+    <div class="motivation">
+      🔥 मेहनत इतनी खामोशी से करो कि सफलता शोर मचा दे! 🔥
+    </div>
+
+    <button class="custom-button btn-red" onclick="openLink('https://drive.google.com/drive/folders/1kuiMOHnkRewT9nN4RBaJyrGIjJJBDLtk?usp=sharing')">
+      🔥 SSC GD 2026 रावण बैच
+    </button>
+
+    <button class="custom-button btn-green" onclick="openLink('https://drive.google.com/drive/folders/1mXVIzRNVTBIoLjDCAT-7Jome1AZ7n6SY?usp=sharing')">
+      🚓 BIHAR POLICE
+    </button>
+
+    <button class="custom-button btn-brown" onclick="openLink('https://drive.google.com/drive/folders/1ZNsSgbboY-uBs2CxYyZhhtaT4PQN-pky?usp=sharing')">
+      📦 SSC MTS
+    </button>
+
+    <button class="custom-button btn-black" onclick="openLink('https://drive.google.com/drive/folders/1CqVZz4A2JqrqMYambXq7QfkYPborLiIP?usp=sharing')">
+      📚 SSC ALL EXAM
+    </button>
+
+    <button class="share-button" onclick="shareApp()">
+      📤 Share App
+    </button>
+
+    <button class="logout-button" onclick="logout()">Logout</button>
+
+    <div class="copyright">
+      © SGS EXAM CRACKER
+    </div>
+  </div>
+
+  <script>
+    // Firebase config (तेरा वाला)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAzBZxzbAIdnHYe5UgEyHeZic-gZvrDS0w",
+      authDomain: "sgs-erxam-cracker.firebaseapp.com",
+      projectId: "sgs-erxam-cracker",
+      storageBucket: "sgs-erxam-cracker.firebasestorage.app",
+      messagingSenderId: "415988825386",
+      appId: "1:415988825386:web:a856e4e05dc9215104b253"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    function googleLogin() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then((result) => {
+          showUserName(result.user);
+        })
+        .catch((error) => {
+          alert(error.message);
+        });
+    }
+
+    function logout() {
+      auth.signOut().then(() => {
+        document.getElementById('login-section').style.display = 'block';
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('user-name').innerText = ''; // नाम हटा दे
+      });
+    }
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        showUserName(user);
+      } else {
+        document.getElementById('login-section').style.display = 'block';
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('user-name').innerText = '';
+      }
+    });
+
+    function showUserName(user) {
+      const name = user.displayName || "User";
+      document.getElementById('user-name').innerText = `👋 Hello, ${name}`;
+    }
+
+    function openLink(url) {
+      window.open(url, '_blank');
+    }
+
+    function shareApp() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'SGS EXAM CRACKER',
+          text: 'Check out this study app!',
+          url: window.location.href
+        }).catch(err => console.log('Share failed:', err));
+      } else {
+        alert('Sharing not supported on this device.');
+      }
+    }
+  </script>
+</body>
+</html>
